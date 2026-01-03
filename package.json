@@ -1,0 +1,25 @@
+{
+  "name": "shortbeyond",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edsonj82/pwr-shortbeyond-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edsonj82/pwr-shortbeyond-api/issues"
+  },
+  "homepage": "https://github.com/edsonj82/pwr-shortbeyond-api#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.3"
+  }
+}

@@ -1,0 +1,23 @@
+meta {
+  name: user login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3333/api/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "edson.jose@email.com",
+    "password": "pwd123"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
