@@ -1,10 +1,14 @@
 import { expect, test } from '@playwright/test';
+import { faker } from '@faker-js/faker';    
 
 test.describe('POST /auth', () => {
     test('should register a new user successfully', async ({ request }) => {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+
         const user = {
-            name: "Edson José dos Santos",
-            email: "edson.jose@email.com",
+            name: `${firstName} ${lastName}`,
+            email: faker.internet.email({firstName, lastName}).toLowerCase(),
             password: "pwd123"
         }
 
