@@ -27,7 +27,7 @@ test.describe('POST /auth', () => {
         expect(responseBody.user).not.toHaveProperty('password') 
     })
 
-    test('should not register a user created', async ({ request }) => {
+    test('should not register a duplicated user', async ({ request }) => {
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
 
