@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
-import { faker } from '@faker-js/faker';    
+import { faker } from '@faker-js/faker';
 
 test.describe('POST /auth', () => {
-    test('should register a new user successfully', async ({ request }) => {
+    test('it should register a new user successfully', async ({ request }) => {
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
 
         const user = {
             name: `${firstName} ${lastName}`,
-            email: faker.internet.email({firstName, lastName}).toLowerCase(),
+            email: faker.internet.email({ firstName, lastName }).toLowerCase(),
             password: "pwd123"
         }
 
@@ -20,20 +20,20 @@ test.describe('POST /auth', () => {
 
         const responseBody = await response.json();
 
-        expect(responseBody).toHaveProperty('message','Usuário cadastrado com sucesso!')
+        expect(responseBody).toHaveProperty('message', 'Usuário cadastrado com sucesso!')
         expect(responseBody.user).toHaveProperty('id')
-        expect(responseBody.user).toHaveProperty('name',user.name)
-        expect(responseBody.user).toHaveProperty('email',user.email)
-        expect(responseBody.user).not.toHaveProperty('password') 
+        expect(responseBody.user).toHaveProperty('name', user.name)
+        expect(responseBody.user).toHaveProperty('email', user.email)
+        expect(responseBody.user).not.toHaveProperty('password')
     })
 
-    test('should not register a duplicated user', async ({ request }) => {
+    test('it should not register a duplicated user', async ({ request }) => {
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
 
         const user = {
             name: `${firstName} ${lastName}`,
-            email: faker.internet.email({firstName, lastName}).toLowerCase(),
+            email: faker.internet.email({ firstName, lastName }).toLowerCase(),
             password: "pwd123"
         }
 
@@ -52,10 +52,10 @@ test.describe('POST /auth', () => {
 
         const responseBody = await responseDuplicate.json();
 
-        expect(responseBody).toHaveProperty('message','Este e-mail já está em uso. Por favor, tente outro.')
+        expect(responseBody).toHaveProperty('message', 'Este e-mail já está em uso. Por favor, tente outro.')
     })
-    
-     test('should not register a invalid email', async ({ request }) => {
+
+    test('it should not register a invalid email', async ({ request }) => {
         const firstName = faker.person.firstName();
         const lastName = faker.person.lastName();
 
@@ -73,6 +73,67 @@ test.describe('POST /auth', () => {
 
         const responseBody = await response.json();
 
-        expect(responseBody).toHaveProperty('message','O campo \'Email\' deve ser um email válido')
+        expect(responseBody).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
     })
+
+    test('the name field is required', async ({ request }) => {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+
+        const user = {
+            email: 'edson@gmail.com',
+            password: "pwd123"
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+
+        expect(response.status()).toBe(400);
+
+        const responseBody = await response.json();
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Name\' é obrigatório')
+    })
+
+    test('the email field is required', async ({ request }) => {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+
+        const user = {
+            name: 'Edson José dos Santos',
+            password: "pwd123"
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+
+        expect(response.status()).toBe(400);
+
+        const responseBody = await response.json();
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
+    })
+
+    test('the password field is required', async ({ request }) => {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+
+        const user = {
+            name: 'Edson José dos Santos',
+            email: 'edson@gmail.com',
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+
+        expect(response.status()).toBe(400);
+
+        const responseBody = await response.json();
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Password\' é obrigatório')
+    })
+
 });
