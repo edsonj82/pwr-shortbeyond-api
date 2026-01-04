@@ -26,5 +26,32 @@ test.describe('POST /auth', () => {
         expect(responseBody.user).toHaveProperty('email',user.email)
         expect(responseBody.user).not.toHaveProperty('password') 
     })
-});
 
+    test('should not register a user created', async ({ request }) => {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+
+        const user = {
+            name: `${firstName} ${lastName}`,
+            email: faker.internet.email({firstName, lastName}).toLowerCase(),
+            password: "pwd123"
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+
+        expect(response.status()).toBe(201);
+
+
+        const responseDuplicate = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+
+        expect(responseDuplicate.status()).toBe(400);
+
+        const responseBody = await responseDuplicate.json();
+
+        expect(responseBody).toHaveProperty('message','Este e-mail já está em uso. Por favor, tente outro.')
+    })  
+});
