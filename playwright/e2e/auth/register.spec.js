@@ -1,16 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { getUser } from '../../support/factories/user';
 
 test.describe('POST /auth', () => {
     test('it should register a new user successfully', async ({ request }) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-
-        const user = {
-            name: `${firstName} ${lastName}`,
-            email: faker.internet.email({ firstName, lastName }).toLowerCase(),
-            password: "pwd123"
-        }
+        const user = getUser()
 
         const response = await request.post('http://localhost:3333/api/auth/register', {
             data: user
@@ -28,14 +21,7 @@ test.describe('POST /auth', () => {
     })
 
     test('it should not register a duplicated user', async ({ request }) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-
-        const user = {
-            name: `${firstName} ${lastName}`,
-            email: faker.internet.email({ firstName, lastName }).toLowerCase(),
-            password: "pwd123"
-        }
+        const user = getUser()
 
         const response = await request.post('http://localhost:3333/api/auth/register', {
             data: user
@@ -56,9 +42,6 @@ test.describe('POST /auth', () => {
     })
 
     test('it should not register a invalid email', async ({ request }) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-
         const user = {
             name: 'Edson José dos Santos',
             email: 'edson&gmail.com',
@@ -77,9 +60,6 @@ test.describe('POST /auth', () => {
     })
 
     test('the name field is required', async ({ request }) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-
         const user = {
             email: 'edson@gmail.com',
             password: "pwd123"
@@ -97,9 +77,6 @@ test.describe('POST /auth', () => {
     })
 
     test('the email field is required', async ({ request }) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-
         const user = {
             name: 'Edson José dos Santos',
             password: "pwd123"
@@ -117,9 +94,6 @@ test.describe('POST /auth', () => {
     })
 
     test('the password field is required', async ({ request }) => {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-
         const user = {
             name: 'Edson José dos Santos',
             email: 'edson@gmail.com',
@@ -135,5 +109,4 @@ test.describe('POST /auth', () => {
 
         expect(responseBody).toHaveProperty('message', 'O campo \'Password\' é obrigatório')
     })
-
 });
