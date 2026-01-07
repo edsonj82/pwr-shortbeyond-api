@@ -10,23 +10,13 @@ test.describe('POST /auth/login', () => {
     });
 
     test('it should login successfully with valid credentials', async ({ request }) => {
-
         //preparação
-        // const user = getUser()
-        // await request.post('http://localhost:3333/api/auth/login', { data: user });
-        const user = {
-            name: 'Edson José dos Santos',
-            email: 'edson.jose@email.com',
-            password: 'pwd123'
-        };
+        const user = getUser()
 
+        const responseCreate = await auth.createUser(user);
+        expect(responseCreate.status()).toBe(201);
         //ação
         const response = await auth.login(user);
-
-        // //ação
-        // const response = await login.auth({ email: user.email, password: user.password });
-
-        // //resultado esperado
         expect(response.status()).toBe(200);
 
         const body = await response.json();
@@ -36,7 +26,7 @@ test.describe('POST /auth/login', () => {
         expect(body.data.user).toHaveProperty('id')
         expect(body.data.user).toHaveProperty('name', user.name)
         expect(body.data.user).toHaveProperty('email', user.email)
-        expect(body.data.user).not.toHaveProperty('password')   
+        expect(body.data.user).not.toHaveProperty('password')
     })
 
     // test('it should not login with invalid credentials', async ({ request }) => {
