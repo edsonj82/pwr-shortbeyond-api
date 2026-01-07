@@ -1,0 +1,27 @@
+meta {
+  name: Create link without auth
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3333/api/links
+  body: json
+  auth: inherit
+}
+
+headers {
+  ~Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDFLRUNDS1dQSk4zV0dXMjQ1Q0IxQlI3S0EiLCJleHAiOjE3Njc4ODEzNDAsImlhdCI6MTc2Nzc5NDk0MH0.UDm_6LWvYU0NSdU7KLO_rOLYZkBGoTCL3Lnprj-ANFo
+}
+
+body:json {
+  {
+    "original_url": "https://www.instagram.com/papitoqa",
+    "title": "Papito Instagram"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

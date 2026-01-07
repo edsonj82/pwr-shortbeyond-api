@@ -38,4 +38,16 @@ test.describe('POST /links', () => {
         expect(data.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);
         expect(message).toBe('Link criado com sucesso')
     })
+
+    test('should not create a link without authentication', async ({ request }) => {
+
+        const link = getLink()
+        const links = linkService(request);
+
+        const response = await links.createLink(link, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDFLRUNDS1dQSk4zV0dXMjQ1Q0IxQlI3S0EiLCJleHAiOjE3Njc4ODEzNDAsImlhdCI6MTc2Nzc5NDk0MH0.UDm_6LWvYU0NSdU7KLO_rOLYZkBGoTCL3Lnprj-ANF3');
+        expect(response.status()).toBe(401);
+
+        const responseBody = await response.json();
+        expect(responseBody).toHaveProperty('message', 'token signature is invalid: signature is invalid')
+    })  
 })
