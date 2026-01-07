@@ -87,4 +87,29 @@ test.describe('POST /links', () => {
         const responseBody = await response.json();
         expect(responseBody).toHaveProperty('message', 'O campo \'OriginalURL\' é obrigatório')
     })
+
+    test('the title field is required', async ({ request }) => {
+
+        const user = getUser()
+        const link = {
+            original_url: 'https://www.invalidlink.com'
+        }
+
+        const authorization = authService(request);
+        const links = linkService(request);
+
+        const responseCreate = await authorization.createUser(user);
+        expect(responseCreate.status()).toBe(201);
+
+        const loginResponse = await authorization.login(user);
+        expect(loginResponse.status()).toBe(200);
+
+        const token = await authorization.getToken(user);
+
+        const response = await links.createLink(link, token);
+        expect(response.status()).toBe(400);
+
+        const responseBody = await response.json();
+        expect(responseBody).toHaveProperty('message', 'O campo \'Title\' é obrigatório')
+    })
 })
