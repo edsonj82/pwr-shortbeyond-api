@@ -10,13 +10,22 @@ export const authService = (request) => {
         return await request.post('http://localhost:3333/api/auth/login', {
             data: {
                 email: user.email,
-                password: user.password     
+                password: user.password,
+                // token: token
             }
         })
     }
 
+    const getToken = async (user) => {
+        const response = await login(user)
+
+        const body = await response.json()
+        return body.data.token
+    }
+
     return {
         createUser,
-        login
+        login,
+        getToken
     }
 }
