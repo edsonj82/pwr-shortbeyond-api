@@ -138,4 +138,35 @@ test.describe('POST /links', () => {
         const responseBody = await response.json();
         expect(responseBody).toHaveProperty('message', 'O campo \'OriginalURL\' deve ser uma URL válida')
     })
+
+    test('should not create a duplicate link', async ({ request }) => {
+
+        const user = getUser()
+        const link = getLink()
+
+        const authorization = authService(request);
+        const links = linkService(request);
+
+        const responseCreate = await authorization.createUser(user);
+        expect(responseCreate.status()).toBe(201);
+
+        const loginResponse = await authorization.login(user);
+        expect(loginResponse.status()).toBe(200);
+
+        const token = await authorization.getToken(user);
+
+        const responseFirst = await links.createLink(link, token);
+        expect(responseFirst.status()).toBe(201);
+
+        console.log('First link created: ', await responseFirst.json());
+        // console.log('link: ', link);
+
+        const responseSecond = await links.createLink(link, token);
+        console.log('Second link created: ', await responseSecond.json());
+        expect(responseSecond.status()).toBe(400);
+
+        const responseBody = await responseSecond.json();
+        expect(responseBody).toHaveProperty('message', 'Já existe um link cadastrado com essa URL para este usuário.')
+    })
+
 })
