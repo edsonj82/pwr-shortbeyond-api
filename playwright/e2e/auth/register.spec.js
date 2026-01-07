@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { getUser } from '../../support/factories/user';
-import { registerService } from '../../support/services/register';
+import { authService } from '../../support/services/auth';
 
 test.describe('POST /auth/register', () => {
 
-    let register
+    let auth
     test.beforeEach(async ({ request }) => {
-        register = registerService(request);
+        auth = authService(request);
     });
 
     test('it should register a new user successfully', async ({ request }) => {
@@ -14,7 +14,7 @@ test.describe('POST /auth/register', () => {
         //preparação
         const user = getUser()
         //ação
-        const response = await register.createUser(user);
+        const response = await auth.createUser(user);
         //resultado esperado
         expect(response.status()).toBe(201);
 
@@ -29,10 +29,10 @@ test.describe('POST /auth/register', () => {
     test('it should not register a duplicated user', async ({ request }) => {
 
         const user = getUser()
-        const response = await register.createUser(user);
+        const response = await auth.createUser(user);
         expect(response.status()).toBe(201);
 
-        const responseDuplicate = await register.createUser(user);
+        const responseDuplicate = await auth.createUser(user);
         expect(responseDuplicate.status()).toBe(400);
 
         const responseBody = await responseDuplicate.json();
@@ -47,7 +47,7 @@ test.describe('POST /auth/register', () => {
             password: "pwd123"
         }
 
-        const response = await register.createUser(user);
+        const response = await auth.createUser(user);
         expect(response.status()).toBe(400);
 
         const responseBody = await response.json();
@@ -61,7 +61,7 @@ test.describe('POST /auth/register', () => {
             password: "pwd123"
         }
 
-        const response = await register.createUser(user);
+        const response = await auth.createUser(user);
         expect(response.status()).toBe(400);
 
         const responseBody = await response.json();
@@ -75,7 +75,7 @@ test.describe('POST /auth/register', () => {
             password: "pwd123"
         }
 
-        const response = await register.createUser(user);
+        const response = await auth.createUser(user);
         expect(response.status()).toBe(400);
 
         const responseBody = await response.json();
@@ -89,7 +89,7 @@ test.describe('POST /auth/register', () => {
             email: 'edson@gmail.com',
         }
 
-        const response = await register.createUser(user);
+        const response = await auth.createUser(user);
         expect(response.status()).toBe(400);
 
         const responseBody = await response.json();
