@@ -48,6 +48,7 @@ test.describe('POST /auth/login', () => {
         // const responseBody = await response.json();
         expect(body).toHaveProperty('message', 'Credenciais inválidas')
     })
+    
     test('the email field is not register', async () => {
         const user = {
             email: "nonexistent@example.com",
@@ -61,6 +62,7 @@ test.describe('POST /auth/login', () => {
 
         expect(body).toHaveProperty('message', 'Credenciais inválidas')
     })
+
     test('the email field is required', async () => {
         const user = getUser()
 
@@ -73,5 +75,19 @@ test.describe('POST /auth/login', () => {
         const body = await response.json();
 
         expect(body).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
+    })
+
+    test('the password field is required', async () => {
+        const user = getUser()
+
+        const responseCreate = await auth.createUser(user);
+        expect(responseCreate.status()).toBe(201);
+
+        const response = await auth.login({ email: user.email });
+        expect(response.status()).toBe(400);
+
+        const body = await response.json();
+
+        expect(body).toHaveProperty('message', 'O campo \'Password\' é obrigatório')
     })
 })
