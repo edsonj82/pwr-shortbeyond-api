@@ -39,7 +39,7 @@ test.describe('POST /links', () => {
         expect(message).toBe('Link criado com sucesso')
     })
 
-    test('should not create a link without authentication', async ({ request }) => {
+    test('should not create a invalid link authentication', async ({ request }) => {
 
         const link = getLink()
         const links = linkService(request);
@@ -49,5 +49,17 @@ test.describe('POST /links', () => {
 
         const responseBody = await response.json();
         expect(responseBody).toHaveProperty('message', 'token signature is invalid: signature is invalid')
-    })  
+    })
+
+    test('should not create without a link authentication', async ({ request }) => {
+
+        const link = getLink()
+        const links = linkService(request);
+
+        const response = await links.createLink(link, '');
+        expect(response.status()).toBe(401);
+
+        const responseBody = await response.json();
+        expect(responseBody).toHaveProperty('message', 'Use o formato: Bearer <token>')
+    })
 })
