@@ -168,5 +168,4 @@ test.describe('POST /links', () => {
         const responseBody = await responseSecond.json();
         expect(responseBody).toHaveProperty('message', 'Já existe um link cadastrado com essa URL para este usuário.')
     })
-
 })
