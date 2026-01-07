@@ -29,8 +29,14 @@ test.describe('POST /auth/login', () => {
         // //resultado esperado
         expect(response.status()).toBe(200);
 
-        // const responseBody = await response.json();
-        // expect(responseBody).toHaveProperty('token')
+        const body = await response.json();
+        expect(body).toHaveProperty('message', 'Login realizado com sucesso')
+        expect(body.data).toHaveProperty('token')
+        expect(body.data).toHaveProperty('user')
+        expect(body.data.user).toHaveProperty('id')
+        expect(body.data.user).toHaveProperty('name', user.name)
+        expect(body.data.user).toHaveProperty('email', user.email)
+        expect(body.data.user).not.toHaveProperty('password')   
     })
 
     // test('it should not login with invalid credentials', async ({ request }) => {
