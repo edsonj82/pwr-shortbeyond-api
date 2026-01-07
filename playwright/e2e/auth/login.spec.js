@@ -37,7 +37,7 @@ test.describe('POST /auth/login', () => {
         const responseCreate = await auth.createUser(user);
         expect(responseCreate.status()).toBe(201);
         //ação
-        const response = await auth.login({...user, password: '123456' });
+        const response = await auth.login({ ...user, password: '123456' });
         expect(response.status()).toBe(401);
 
         const body = await response.json();
@@ -48,4 +48,17 @@ test.describe('POST /auth/login', () => {
         // const responseBody = await response.json();
         expect(body).toHaveProperty('message', 'Credenciais inválidas')
     })
-})      
+    test('the email field is not register', async () => {
+        const user = {
+            email: "nonexistent@example.com",
+            password: "pwd123"
+        }
+
+        const response = await auth.login(user);
+        expect(response.status()).toBe(401);
+
+        const body = await response.json();
+
+        expect(body).toHaveProperty('message', 'Credenciais inválidas')
+    })
+})
