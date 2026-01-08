@@ -90,4 +90,18 @@ test.describe('POST /auth/login', () => {
 
         expect(body).toHaveProperty('message', 'O campo \'Password\' é obrigatório')
     })
+
+    test('it should not login with invalid email format', async () => {
+        const user = {
+            email: "invalidemailformat",
+            password: "pwd123"
+        }
+
+        const response = await auth.login(user);
+        expect(response.status()).toBe(400);
+
+        const body = await response.json();
+
+        expect(body).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
+    })
 })
