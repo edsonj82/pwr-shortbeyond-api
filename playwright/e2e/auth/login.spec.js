@@ -4,6 +4,8 @@ import { authService } from '../../support/services/auth';
 
 test.describe('POST /auth/login', () => {
 
+    const user = getUser()
+
     let auth
     test.beforeEach(async ({ request }) => {
         auth = authService(request);
@@ -11,7 +13,7 @@ test.describe('POST /auth/login', () => {
 
     test('it should login successfully with valid credentials', async ({ request }) => {
         //preparação
-        const user = getUser()
+        // const user = getUser()
 
         const responseCreate = await auth.createUser(user);
         expect(responseCreate.status()).toBe(201);
@@ -32,7 +34,7 @@ test.describe('POST /auth/login', () => {
 
     test('it should not login with invalid credentials', async ({ request }) => {
         //preparação
-        const user = getUser()
+        // const user = getUser()
 
         const responseCreate = await auth.createUser(user);
         expect(responseCreate.status()).toBe(201);
@@ -64,7 +66,7 @@ test.describe('POST /auth/login', () => {
     })
 
     test('the email field is required', async () => {
-        const user = getUser()
+        // const user = getUser()
 
         const responseCreate = await auth.createUser(user);
         expect(responseCreate.status()).toBe(201);
@@ -78,7 +80,7 @@ test.describe('POST /auth/login', () => {
     })
 
     test('the password field is required', async () => {
-        const user = getUser()
+        // const user = getUser()
 
         const responseCreate = await auth.createUser(user);
         expect(responseCreate.status()).toBe(201);
@@ -106,7 +108,7 @@ test.describe('POST /auth/login', () => {
     })
 
     test('it should not login with short password', async () => {
-        const user = getUser()
+        // const user = getUser()
 
         const responseCreate = await auth.createUser(user);
         expect(responseCreate.status()).toBe(201);
@@ -121,6 +123,7 @@ test.describe('POST /auth/login', () => {
     })
 
     test('it should not login with long password', async () => {
+        // FIX: Refactor to use getUser factory with password length option
         const user = getUser()
 
         const responseCreate = await auth.createUser(user);
@@ -129,7 +132,7 @@ test.describe('POST /auth/login', () => {
         const longPassword = 'a'.repeat(65); // 65 characters
 
         const response = await auth.login({ email: user.email, password: longPassword });
-                // TODO: BUG - The API is returning 401 instead of 400
+        // TODO: BUG - The API is returning 401 instead of 400
         expect(response.status()).toBe(400);
 
         const body = await response.json();
@@ -138,7 +141,7 @@ test.describe('POST /auth/login', () => {
     })
 
     test('it should not login unregistered user', async () => {
-        const user = getUser()
+        // const user = getUser()
 
         const response = await auth.login(user);
         expect(response.status()).toBe(401);
