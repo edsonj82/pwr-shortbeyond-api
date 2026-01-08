@@ -129,11 +129,22 @@ test.describe('POST /auth/login', () => {
         const longPassword = 'a'.repeat(65); // 65 characters
 
         const response = await auth.login({ email: user.email, password: longPassword });
-        // TODO: BUG - The API is returning 401 instead of 400
+                // TODO: BUG - The API is returning 401 instead of 400
         expect(response.status()).toBe(400);
 
         const body = await response.json();
 
         expect(body).toHaveProperty('message', 'O campo \'Password\' deve ter no máximo 64 caracteres')
+    })
+
+    test('it should not login unregistered user', async () => {
+        const user = getUser()
+
+        const response = await auth.login(user);
+        expect(response.status()).toBe(401);
+
+        const body = await response.json();
+
+        expect(body).toHaveProperty('message', 'Credenciais inválidas')
     })
 })
