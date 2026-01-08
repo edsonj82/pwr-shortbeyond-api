@@ -104,4 +104,19 @@ test.describe('POST /auth/login', () => {
 
         expect(body).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
     })
+
+    test('it should not login with short password', async () => {
+        const user = getUser()
+
+        const responseCreate = await auth.createUser(user);
+        expect(responseCreate.status()).toBe(201);
+
+        const response = await auth.login({ email: user.email, password: '123' });
+        // TODO: BUG - The API is returning 401 instead of 400
+        expect(response.status()).toBe(400);
+
+        const body = await response.json();
+
+        expect(body).toHaveProperty('message', 'O campo \'Password\' deve ter no mínimo 6 caracteres')
+    })
 })

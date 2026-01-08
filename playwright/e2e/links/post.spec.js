@@ -163,6 +163,7 @@ test.describe('POST /links', () => {
 
         const responseSecond = await links.createLink(link, token);
         console.log('Second link created: ', await responseSecond.json());
+        // TODO: BUG - The API is allowing duplicate links for the same user
         expect(responseSecond.status()).toBe(400);
 
         const responseBody = await responseSecond.json();
