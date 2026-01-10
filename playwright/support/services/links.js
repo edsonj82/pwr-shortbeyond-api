@@ -6,8 +6,9 @@ export const linkService = (request) => {
                 Authorization: `Bearer ${token}`
             },
             data: {
-                original_url: link.original_url,
-                title: link.title
+                // original_url: link.original_url,
+                // title: link.title
+                ...link
             }
         })
     }
