@@ -16,7 +16,7 @@ export const getListLinks = () => {
     return Array.from({ length: 5 }, () => getLink());
 }
 
-export const getUserWithLinks = () => {
+export const getUserWithLinks = (linksCount = 1) => {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     return {
@@ -26,7 +26,7 @@ export const getUserWithLinks = () => {
         links: faker.helpers.multiple(() => ({
             original_url: faker.internet.url(),
             title: faker.lorem.words({ min: 2, max: 5 })
-        }), { count: 5 })
+        }), { count: linksCount })
 
         // links: Array.from({ length: 5 }, () => getLink())
         // links: [getLink(), getLink(), getLink(), getLink(), getLink()]
