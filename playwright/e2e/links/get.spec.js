@@ -31,8 +31,7 @@ test.describe('GET /links/', () => {
             expect(link).toHaveProperty('short_code');
             expect(link).toHaveProperty('title'), user.links[index].title;
 
-            expect(link.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);
-            // console.log(`Link ${index + 1}:`, link);
+            expect(link.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);    
 
         }
     });
