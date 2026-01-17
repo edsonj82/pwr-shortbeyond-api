@@ -17,6 +17,21 @@ test.describe('GET /links/', () => {
             await links.createLink(link, token);
         }
 
+        const response = await links.getLinks(token)
+        expect(response.status()).toBe(200);
+
+        const body = await response.json();
+        expect(body.message).toBe('Links Encurtados');
+        expect(body.count).toBe(user.links.length);
+        expect(Array.isArray(body.data)).toBeTruthy();
+
+        for (const link of body.data) {
+            expect(link).toHaveProperty('id');
+            expect(link).toHaveProperty('original_url');
+            expect(link).toHaveProperty('short_code');
+            expect(link).toHaveProperty('title');
+            expect(link.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);
+            // expect(link).toHaveProperty('created_at');
+        }
     });
 })
-
