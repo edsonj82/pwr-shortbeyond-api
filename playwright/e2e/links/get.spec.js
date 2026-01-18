@@ -31,8 +31,27 @@ test.describe('GET /links/', () => {
             expect(link).toHaveProperty('short_code');
             expect(link).toHaveProperty('title'), user.links[index].title;
 
-            expect(link.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);    
+            expect(link.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);
 
         }
-    });
+    })
+
+    test('should return a empty list of links', async ({ authorization, links }) => {
+
+        const user = getUserWithLinks(0)
+
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user);
+
+        const response = await links.getLinks(token)
+        expect(response.status()).toBe(200);
+
+        const body = await response.json();
+        expect(body.message).toBe('Links Encurtados');
+        expect(body.count).toBe(0);
+        expect(Array.isArray(body.data)).toBeTruthy();
+        expect(body.data.length).toBe(0);   
+        
+    })
+
 })
