@@ -83,4 +83,19 @@ test.describe('DELETE /links/:id', () => {
         // TODO: BUG - Message is not correct
         expect(body).toHaveProperty('message', 'O campo \'id\' é obrigatório')
     })
+
+    test('should not delete a link when token is expired', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+        await authorization.createUser(user);
+
+        const token = await authorization.getToken(user)
+        const linkId = await links.getLinkId(user.links[0], token)
+
+        const tokenExpirated = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDFLRjRIS0FZNDE3WTZYNzdaSkhLOEhaOUEiLCJleHAiOjE3Njg2OTE4NjYsImlhdCI6MTc2ODYwNTQ2Nn0.Oax4Qetr6oD4jcH4vkSyqoWpSwmvy_LEFL4cOYNO5bs'
+
+        const resonse = await links.removeLink(linkId, tokenExpirated)
+        expect(resonse.status()).toBe(401);
+        const body = await resonse.json();
+        expect(body).toHaveProperty('message', 'token has invalid claims: token is expired')
+    })
 })  
