@@ -60,5 +60,15 @@ test.describe('DELETE /links/:id', () => {
         const body = await resonse.json();
         expect(body).toHaveProperty('message', 'Você não tem permissão para excluir este link')
     })
-    
+
+    test('the id field is required', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user)
+        const resonse = await links.removeLink('', token)
+        // TODO: BUG - The API is returning 404 instead of 400
+        expect(resonse.status()).toBe(400);
+        const body = await resonse.json();
+        expect(body).toHaveProperty('message', 'O campo \'id\' é obrigatório')
+    })
 })
