@@ -98,4 +98,18 @@ test.describe('DELETE /links/:id', () => {
         const body = await resonse.json();
         expect(body).toHaveProperty('message', 'token has invalid claims: token is expired')
     })
+
+    test('should not delete a link when token is for a non-existent user', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user)
+        const linkId = await links.getLinkId(user.links[0], token)
+        const tokenNonExistentUser = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiTm9FdmVyRXhpc3RlbnRVc2VySWQiLCJleHAiOjE3Njg2OTE4NjYsImlhdCI6MTc2ODYwNTQ2Nn0.DQw4w9WgXcQ-nu5l0k5hX5Y0bXr6I8o5Z4v5vV5Y5Y5Y'
+        const resonse = await links.removeLink(linkId, tokenNonExistentUser)
+        expect(resonse.status()).toBe(401);
+        const body = await resonse.json();
+        console.log(body);
+        // TODO: BUG - Message is not correct
+        expect(body).toHaveProperty('message', 'Usuário não encontrado')
+    })
 })  
