@@ -33,6 +33,8 @@ export const linkService = (request) => {
     }
 
     const removeLink = async (linkId, token) => {
+        console.log('Removing link with ID:', linkId);
+        console.log('Using token:', token);
         return await request.delete(`http://localhost:3333/api/links/${linkId}`, {
             headers: {
                 Authorization: `Bearer ${token}`

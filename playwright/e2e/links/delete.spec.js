@@ -71,4 +71,16 @@ test.describe('DELETE /links/:id', () => {
         const body = await resonse.json();
         expect(body).toHaveProperty('message', 'O campo \'id\' é obrigatório')
     })
-})
+
+    test('should not delete a link with invalid id format', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user)
+        const resonse = await links.removeLink('invalid-id-format', token)
+        expect(resonse.status()).toBe(400);
+        const body = await resonse.json();
+        console.log(body);
+        // TODO: BUG - Message is not correct
+        expect(body).toHaveProperty('message', 'O campo \'id\' é obrigatório')
+    })
+})  
