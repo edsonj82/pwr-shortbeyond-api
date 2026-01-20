@@ -37,4 +37,12 @@ test.describe('DELETE /links/:id', () => {
         const body = await resonse.json();
         expect(body).toHaveProperty('message', 'Use o formato: Bearer <token>')
     })
+
+    test('should not delete a link with invalid authentication', async ({ links }) => {
+        const resonse = await links.removeLink('some-link-id', 'invalid-token')
+        expect(resonse.status()).toBe(401);
+        const body = await resonse.json();
+        // TODO: BUG - Adjust return message
+        expect(body).toHaveProperty('message', 'token is malformed: token contains an invalid number of segments')
+    })
 })
