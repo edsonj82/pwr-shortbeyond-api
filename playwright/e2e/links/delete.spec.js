@@ -31,4 +31,10 @@ test.describe('DELETE /links/:id', () => {
         expect(body).toHaveProperty('message', 'Link não encontrado')
     })
 
+    test('should not delete a link without authentication', async ({ links }) => {
+        const resonse = await links.removeLink('some-link-id', '')
+        expect(resonse.status()).toBe(401);
+        const body = await resonse.json();
+        expect(body).toHaveProperty('message', 'Use o formato: Bearer <token>')
+    })
 })
