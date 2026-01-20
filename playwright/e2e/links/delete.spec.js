@@ -12,8 +12,10 @@ test.describe('DELETE /links/:id', () => {
         const token = await authorization.getToken(user)
         const linkId = await links.getLinkId(user.links[0], token)
 
-        console.log('Link ID to delete:', linkId);
+        const resonse = await links.removeLink(linkId, token)
+        expect(resonse.status()).toBe(200);
 
+        const body = await resonse.json();
+        expect(body).toHaveProperty('message', 'Link excluído com sucesso') 
     })
-
 })
