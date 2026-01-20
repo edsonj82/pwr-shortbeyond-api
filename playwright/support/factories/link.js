@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { count } from 'node:console';
 
 export const getLink = () => {
     const original_url = faker.internet.url();
