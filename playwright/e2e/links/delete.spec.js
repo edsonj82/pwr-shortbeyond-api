@@ -16,6 +16,19 @@ test.describe('DELETE /links/:id', () => {
         expect(resonse.status()).toBe(200);
 
         const body = await resonse.json();
-        expect(body).toHaveProperty('message', 'Link excluído com sucesso') 
+        expect(body).toHaveProperty('message', 'Link excluído com sucesso')
     })
+
+    test('should not delete a link that does not exist', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user)
+
+        const resonse = await links.removeLink('nonexistent-link-id', token)
+        // TODO: BUG - The API is returning 401 instead of 400
+        expect(resonse.status()).toBe(404);
+        const body = await resonse.json();
+        expect(body).toHaveProperty('message', 'Link não encontrado')
+    })
+
 })
