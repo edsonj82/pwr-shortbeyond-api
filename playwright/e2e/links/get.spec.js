@@ -80,4 +80,18 @@ test.describe('GET /links/', () => {
         expect(Array.isArray(body.data)).toBeTruthy();
         expect(body.data.length).toBe(0);
     })
+
+    test('should return 401 when using expired token', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user);
+
+        // Simulate an expired token (this is just an example, actual implementation may vary)
+        const expiredToken = token.split('.').map(() => 'expired').join('.');
+        const response = await links.getLinks(expiredToken);
+        expect(response.status()).toBe(401);
+        const body = await response.json();
+        //TODO: BUG - Adjust return message
+        expect(body).toHaveProperty('message', 'Token expirado');
+    })
 })
