@@ -145,4 +145,24 @@ test.describe('POST /links', () => {
         const body2 = await response2.json();
         expect(body1.data.short_code).not.toBe(body2.data.short_code);
     })
+
+    // TODO: BUG - Adjust customShorCode with error in expected result
+    // Error: Falha ao criar link: {"message":"O campo 'OriginalURL' é obrigatório"}
+    test('should create link with custom short_code', async ({ links }) => {
+        // const user = getUserWithLinks(0);
+
+        // await authorization.createUser(user);
+        // const token = await authorization.getToken(user);
+
+        const customShortCode = 'abc12'
+        const linkWithCustomCode = {
+            original_url: 'https://www.custom-short-code.com',
+            title: 'Link Customizado',
+            short_code: customShortCode
+        }
+        const response = await links.createLink(linkWithCustomCode, token);
+        expect(response.status()).toBe(201);
+        const body = await response.json();
+        expect(body.data.short_code).toBe(customShortCode);
+    })
 })  

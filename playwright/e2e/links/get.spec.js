@@ -157,7 +157,6 @@ test.describe('GET /links/', () => {
     })
 // TODO: BUG - Adjust validation with error 400
 // Error: Falha ao criar link: {"message":"O campo 'OriginalURL' é obrigatório"}
-
     test('should return 401 when using expired token', async ({ authorization, links }) => {
         const user1 = getUserWithLinks()
         const user2 = getUserWithLinks()
