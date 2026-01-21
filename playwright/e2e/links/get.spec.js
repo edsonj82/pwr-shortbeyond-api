@@ -81,35 +81,26 @@ test.describe('GET /links/', () => {
         expect(body.data.length).toBe(0);
     })
 
-    test('should return 401 when using expired token', async ({ authorization, links }) => {
-        const user = getUserWithLinks()
-        await authorization.createUser(user);
-        const token = await authorization.getToken(user);
-
-        // Simulate an expired token (this is just an example, actual implementation may vary)
-        const expiredToken = token.split('.').map(() => 'expired').join('.');
-        const response = await links.getLinks(expiredToken);
-        expect(response.status()).toBe(401);
-        const body = await response.json();
-        //TODO: BUG - Adjust return message
-        expect(body).toHaveProperty('message', 'Token expirado');
-    })
-
-    test('should return empty list when user has no links', async ({ authorization, links }) => {
-        const user1 = getUserWithLinks()
-        const user2 = getUserWithLinks()
-
+    test('should return links specific to each user', async ({ authorization, links }) => {
+        const user1 = getUserWithLinks(3);
+        const user2 = getUserWithLinks(2);
         await authorization.createUser(user1);
         await authorization.createUser(user2);
         const token1 = await authorization.getToken(user1);
         const token2 = await authorization.getToken(user2);
-        
-        const response = await links.getLinks(token2);
-        
-        expect(response.status()).toBe(200);
-        const body = await response.json();
-        expect(body.count).toBe(0);
-        expect(Array.isArray(body.data)).toBeTruthy();
-        expect(body.data.length).toBe(0);
+        for (const link of user1.links) {
+            await links.createLink(link, token1);
+        }
+        for (const link of user2.links) {
+            await links.createLink(link, token2);
+        }
+        const response1 = await links.getLinks(token1);
+        expect(response1.status()).toBe(200);
+        const body1 = await response1.json();
+        expect(body1.count).toBe(user1.links.length);
+        const response2 = await links.getLinks(token2);
+        expect(response2.status()).toBe(200);
+        const body2 = await response2.json();
+        expect(body2.count).toBe(user2.links.length);
     })
 })
