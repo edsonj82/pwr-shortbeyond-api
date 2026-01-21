@@ -4,14 +4,12 @@ import { getUserWithLinks } from '../../support/factories/link';
 test.describe('GET /links/', () => {
 
     test('should return a list of links', async ({ authorization, links }) => {
-
         const user = getUserWithLinks()
 
         await authorization.createUser(user);
         const token = await authorization.getToken(user);
 
-        console.log('User Token:', token);
-
+        // console.log('User Token:', token);
         for (const link of user.links) {
             // console.log('Creating link:', link);
             await links.createLink(link, token);
@@ -32,12 +30,10 @@ test.describe('GET /links/', () => {
             expect(link).toHaveProperty('title'), user.links[index].title;
 
             expect(link.short_code).toMatch(/^[a-zA-Z0-9]{5}$/);
-
         }
     })
 
     test('should return a empty list of links', async ({ authorization, links }) => {
-
         const user = getUserWithLinks(0)
 
         await authorization.createUser(user);
@@ -51,6 +47,13 @@ test.describe('GET /links/', () => {
         expect(body.count).toBe(0);
         expect(Array.isArray(body.data)).toBeTruthy();
         expect(body.data.length).toBe(0);   
+    })
+
+    test('should not get links without authentication', async ({ links }) => {
+        const response = await links.getLinks('');
+        expect(response.status()).toBe(401);
+        const body = await response.json();
+        expect(body).toHaveProperty('message', 'Use o formato: Bearer <token>');
     })
 
 })
