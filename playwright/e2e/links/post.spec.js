@@ -125,5 +125,24 @@ test.describe('POST /links', () => {
         const responseUser2 = await links.createLink(link, token2);
         expect(responseUser2.status()).toBe(201);
         console.log('User 2 link created: ', await responseUser2.json());
-    })  
-})
+    })
+
+    test('should generate unique short_code for each link', async ({ links }) => {
+
+        const link1 = {
+            original_url: 'https://www.unique-link1.com',
+            title: 'Link Único 1'
+        }
+        const link2 = {
+            original_url: 'https://www.unique-link2.com',
+            title: 'Link Único 2'
+        }
+        const response1 = await links.createLink(link1, token);
+        expect(response1.status()).toBe(201);
+        const body1 = await response1.json();
+        const response2 = await links.createLink(link2, token);
+        expect(response2.status()).toBe(201);
+        const body2 = await response2.json();
+        expect(body1.data.short_code).not.toBe(body2.data.short_code);
+    })
+})  
