@@ -94,4 +94,22 @@ test.describe('GET /links/', () => {
         //TODO: BUG - Adjust return message
         expect(body).toHaveProperty('message', 'Token expirado');
     })
+
+    test('should return empty list when user has no links', async ({ authorization, links }) => {
+        const user1 = getUserWithLinks()
+        const user2 = getUserWithLinks()
+
+        await authorization.createUser(user1);
+        await authorization.createUser(user2);
+        const token1 = await authorization.getToken(user1);
+        const token2 = await authorization.getToken(user2);
+        
+        const response = await links.getLinks(token2);
+        
+        expect(response.status()).toBe(200);
+        const body = await response.json();
+        expect(body.count).toBe(0);
+        expect(Array.isArray(body.data)).toBeTruthy();
+        expect(body.data.length).toBe(0);
+    })
 })
