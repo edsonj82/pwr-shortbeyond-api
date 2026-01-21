@@ -1,6 +1,8 @@
 import { test, expect } from "../../support/fixtures";
 
 import { getUserWithLinks } from "../../support/factories/link";
+import { text } from "node:stream/consumers";
+import { generateUUID } from "../../support/utils";
 
 
 test.describe('DELETE /links/:id', () => {
@@ -17,6 +19,21 @@ test.describe('DELETE /links/:id', () => {
 
         const body = await resonse.json();
         expect(body).toHaveProperty('message', 'Link excluído com sucesso')
+    })
+
+    test('should not delete when does not exist a id', async ({ authorization, links }) => {
+        const user = getUserWithLinks()
+
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user)
+        const linkId = generateUUID();
+
+        const resonse = await links.removeLink(linkId, token)
+        // TODO: BUG - The API is returning 400 instead of 404
+        expect(resonse.status()).toBe(404);
+
+        const body = await resonse.json();
+        expect(body).toHaveProperty('message', 'Link não encontrado')
     })
 
     test('should not delete a link that does not exist', async ({ authorization, links }) => {
@@ -112,4 +129,24 @@ test.describe('DELETE /links/:id', () => {
         // TODO: BUG - Message is not correct
         expect(body).toHaveProperty('message', 'Usuário não encontrado')
     })
+
+
+
+    // test('should handle server errors gracefully', async ({ authorization, links }) => {
+    //     const user = getUserWithLinks()
+    //     await authorization.createUser(user);
+    //     const token = await authorization.getToken(user)
+    //     const linkId = await links.getLinkId(user.links[0], token)
+
+    //     // Simulate server error by providing an invalid URL in the linkService
+    //     links.baseURL = 'http://localhost:3333/invalid-endpoint';
+
+    //     console.log('linksError: ' + links);
+    //     const response = await links.removeLink(linkId, token)
+    //     console.log('status: ' + response.json());
+    //     expect(response.status()).toBe(500);
+    //     const body = await response.json();
+    //     expect(body).toHaveProperty('message', 'Erro interno do servidor')
+    // })
+
 })  
