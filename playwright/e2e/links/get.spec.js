@@ -46,7 +46,7 @@ test.describe('GET /links/', () => {
         expect(body.message).toBe('Links Encurtados');
         expect(body.count).toBe(0);
         expect(Array.isArray(body.data)).toBeTruthy();
-        expect(body.data.length).toBe(0);   
+        expect(body.data.length).toBe(0);
     })
 
     test('should not get links without authentication', async ({ links }) => {
@@ -56,4 +56,28 @@ test.describe('GET /links/', () => {
         expect(body).toHaveProperty('message', 'Use o formato: Bearer <token>');
     })
 
+    test('should not get links with invalid authentication', async ({ links }) => {
+        const response = await links.getLinks('invalid-token');
+        expect(response.status()).toBe(401);
+        const body = await response.json();
+        //TODO: BUG - Adjust return message
+        expect(body).toHaveProperty('message', 'Token inválido');
+    })
+
+    test('should return empty list when user has no links', async ({ authorization, links }) => {
+        const user = getUserWithLinks(0)
+
+        await authorization.createUser(user);
+        const token = await authorization.getToken(user);
+
+        const response = await links.getLinks(token)
+        expect(response.status()).toBe(200);
+
+        const body = await response.json();
+        // console.log(body);
+        expect(body.message).toBe('Links Encurtados');
+        expect(body.count).toBe(0);
+        expect(Array.isArray(body.data)).toBeTruthy();
+        expect(body.data.length).toBe(0);
+    })
 })
