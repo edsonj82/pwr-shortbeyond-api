@@ -112,4 +112,18 @@ test.describe('POST /links', () => {
         const responseBody = await responseSecond.json();
         expect(responseBody).toHaveProperty('message', 'Já existe um link cadastrado com essa URL para este usuário.')
     })
+
+    test('should create the same link for different users', async ({ authorization, links }) => {
+
+        const user2 = getUser()
+        await authorization.createUser(user2);
+        const token2 = await authorization.getToken(user2);
+        const responseUser1 = await links.createLink(link, token);
+        expect(responseUser1.status()).toBe(201);
+        console.log('User 1 link created: ', await responseUser1.json());
+
+        const responseUser2 = await links.createLink(link, token2);
+        expect(responseUser2.status()).toBe(201);
+        console.log('User 2 link created: ', await responseUser2.json());
+    })  
 })
