@@ -6,7 +6,7 @@ export const getUser = () => {
 
     return {
         name: `${firstName} ${lastName}`,
-        email: faker.internet.email({ firstName, lastName }).toLowerCase(),
+        email: faker.internet.email({ firstName, lastName, provider: 'theotokus.com' }).toLowerCase(),
         password: "pwd123"
     }
 }

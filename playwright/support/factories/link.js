@@ -20,7 +20,7 @@ export const getUserWithLinks = (linksCount = 1) => {
     const lastName = faker.person.lastName();
     return {
         name: `${firstName} ${lastName}`,
-        email: faker.internet.email({ firstName, lastName }).toLowerCase(),
+        email: faker.internet.email({ firstName, lastName, provider: 'theotokus.com' }).toLowerCase(),
         password: "pwd123",
         links: faker.helpers.multiple(() => ({
             original_url: faker.internet.url(),
