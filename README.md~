@@ -10,9 +10,9 @@ O foco deste projeto é demonstrar **boas práticas em automação de testes de 
 
 A ShortBeyond API permite:
 
-* Cadastro e autenticação de usuários
-* Criação e gerenciamento de links encurtados
-* Redirecionamento a partir de códigos curtos
+- Cadastro e autenticação de usuários
+- Criação e gerenciamento de links encurtados
+- Redirecionamento a partir de códigos curtos
 
 > API exclusiva para alunos dos cursos do **Projeto TestBeyond** ☕💛
 
@@ -20,12 +20,12 @@ A ShortBeyond API permite:
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Node.js** (ambiente de execução dos testes)
-* **Playwright** (test runner e assertions)
-* **TypeScript** (tipagem e organização)
-* **Bruno** (testes manuais e exploração de API)
-* **Podman** (containerização da API)
-* **Mermaid** (diagrama de arquitetura)
+- **Node.js** (ambiente de execução dos testes)
+- **Playwright** (test runner e assertions)
+- **TypeScript** (tipagem e organização)
+- **Bruno** (testes manuais e exploração de API)
+- **Podman** (containerização da API)
+- **Mermaid** (diagrama de arquitetura)
 
 ---
 
@@ -33,9 +33,9 @@ A ShortBeyond API permite:
 
 ### 1️⃣ Pré-requisitos
 
-* Node.js 18+
-* Podman
-* Bruno CLI
+- Node.js 18+
+- Podman
+- Bruno CLI
 
 ---
 
@@ -117,23 +117,23 @@ npx playwright test --ui
 
 ## ⭐ Destaques da Arquitetura de Testes
 
-* **Factories**: responsáveis por gerar dados de teste de forma consistente e reutilizável (usuários, links, payloads de API).
-* **Fixtures**: controlam o setup e teardown dos testes, incluindo autenticação, headers comuns e preparação de contexto.
-* **Services**: camada que encapsula chamadas HTTP para a API (ex: AuthService, LinksService), evitando duplicação de lógica nos testes.
-* **Database**: utilitários para manipulação direta da base de dados em cenários de teste (ex: limpeza de dados, preparação de massa).
-* **E2E (End-to-End)**: testes que validam fluxos completos do sistema, cobrindo desde a criação do usuário até o redirecionamento do link encurtado.
+- **Factories**: responsáveis por gerar dados de teste de forma consistente e reutilizável (usuários, links, payloads de API).
+- **Fixtures**: controlam o setup e teardown dos testes, incluindo autenticação, headers comuns e preparação de contexto.
+- **Services**: camada que encapsula chamadas HTTP para a API (ex: AuthService, LinksService), evitando duplicação de lógica nos testes.
+- **Database**: utilitários para manipulação direta da base de dados em cenários de teste (ex: limpeza de dados, preparação de massa).
+- **E2E (End-to-End)**: testes que validam fluxos completos do sistema, cobrindo desde a criação do usuário até o redirecionamento do link encurtado.
 
 ### 🧪 Fixtures
 
-* Centralizam setup e teardown
-* Reutilizam autenticação e contexto de API
-* Reduzem duplicação de código
+- Centralizam setup e teardown
+- Reutilizam autenticação e contexto de API
+- Reduzem duplicação de código
 
 ### 🏭 Factories
 
-* Geram dados dinâmicos e válidos
-* Facilitam criação de usuários e links
-* Tornam os testes mais legíveis e previsíveis
+- Geram dados dinâmicos e válidos
+- Facilitam criação de usuários e links
+- Tornam os testes mais legíveis e previsíveis
 
 ---
 
@@ -155,10 +155,9 @@ test('deve criar um usuário com sucesso', async ({ request }) => {
 ```
 
 **O que este teste demonstra:**
-
-* Uso de factory para dados de entrada
-* Teste independente e legível
-* Validação direta da API
+- Uso de factory para dados de entrada
+- Teste independente e legível
+- Validação direta da API
 
 ---
 
@@ -183,19 +182,16 @@ graph TD
 ## 🔍 Endpoints Cobertos
 
 ### Autenticação
-
-* `POST /auth/register`
-* `POST /auth/login`
+- `POST /auth/register`
+- `POST /auth/login`
 
 ### Links
-
-* `POST /links`
-* `GET /links`
-* `DELETE /links/{id}`
+- `POST /links`
+- `GET /links`
+- `DELETE /links/{id}`
 
 ### Redirecionamento
-
-* `GET /{code}`
+- `GET /{code}`
 
 ---
 
@@ -213,10 +209,10 @@ Pode ser explorada via Swagger UI.
 
 ## ✂️ Versão Resumida
 
-* Testes de API com Playwright
-* Arquitetura limpa com fixtures e factories
-* Setup rápido com Podman
-* README pronto para onboarding
+- Testes de API com Playwright
+- Arquitetura limpa com fixtures e factories
+- Setup rápido com Podman
+- README pronto para onboarding
 
 ---
 
