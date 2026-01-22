@@ -1,203 +1,143 @@
-🚀 ShortBeyond API — Test Automation
+# 🚀 ShortBeyond API — Test Automation
 
-Este repositório contém a automação de testes da ShortBeyond API, uma API RESTful de encurtamento de URLs desenvolvida em Go e utilizada no Projeto TestBeyond.
+Este repositório contém a **automação de testes da ShortBeyond API**, uma API RESTful de encurtamento de URLs desenvolvida em **Go** e utilizada no **Projeto TestBeyond**.
 
-O objetivo é demonstrar boas práticas em automação de testes de API, organização de código, reutilização de componentes e facilidade de manutenção em ambientes reais.
+O objetivo deste projeto é demonstrar **boas práticas em automação de testes de API**, organização de código, reutilização de componentes e facilidade de manutenção em ambientes reais.
 
-📌 Sobre a API
+---
 
-A ShortBeyond API permite:
+## 📌 Sobre a API
 
-Cadastro e autenticação de usuários
+A **ShortBeyond API** permite:
 
-Criação e gerenciamento de links encurtados
+- Cadastro e autenticação de usuários  
+- Criação e gerenciamento de links encurtados  
+- Redirecionamento por código curto  
 
-Redirecionamento por código curto
+> 🔒 API exclusiva para alunos dos cursos do **Projeto TestBeyond**  
+> Feito com ☕ e 💛 pelo Papito
 
-🔒 API exclusiva para alunos dos cursos do Projeto TestBeyond
-Feito com ☕ e 💛 pelo Papito
+---
 
-🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 
-Node.js — ambiente de execução
+- **Node.js**
+- **Playwright**
+- **TypeScript**
+- **Bruno**
+- **Podman / Podman Compose**
+- **PostgreSQL**
+- **Mermaid**
 
-Playwright — test runner e assertions
+---
 
-TypeScript — tipagem e organização
+## 🚀 Instalação e Configuração
 
-Bruno — testes manuais e exploração da API
+### Pré-requisitos
 
-Podman — execução da API em containers
+- Node.js 18+
+- Podman
+- Bruno CLI
 
-PostgreSQL — base de dados
+### Clonando o repositório
 
-Mermaid — diagrama de arquitetura
+```bash
+git clone https://github.com/edsonj82/pwr-shortbeyond-api.git
+cd pwr-shortbeyond-api
+```
 
-🚀 Instalação e Configuração
-✅ Pré-requisitos
+### Instalando dependências
 
-Node.js 18+
-
-Podman / Podman Compose
-
-Bruno CLI
-
-📥 Clonando o repositório
-git clone https://github.com/seu-usuario/shortbeyond-api-tests.git
-cd shortbeyond-api-tests
-
-📦 Instalando dependências
+```bash
 npm install
+```
 
-🐳 Subindo a API com Podman
+### Subindo a API com Podman
+
+```bash
 podman-compose up -d
-
+```
 
 A API ficará disponível em:
 
+```
 http://localhost:3333/api
+```
 
-▶️ Executando os testes automatizados
+### Executando os testes
+
+```bash
 npx playwright test
+```
 
-
-Modo interativo:
-
+```bash
 npx playwright test --ui
+```
 
-📂 Estrutura do Projeto
-.
-├── tests/
-│   ├── auth/
-│   ├── links/
-│   └── redirect/
-│
-├── factories/
-│   ├── user.factory.ts
-│   └── link.factory.ts
-│
+---
+
+## 📂 Estrutura do Projeto
+
+```
+playwright/
+├── e2e/
 ├── fixtures/
-│   └── api.fixture.ts
-│
+├── factories/
 ├── services/
-│   ├── auth.service.ts
-│   └── links.service.ts
-│
-├── database/
-│   └── cleanup.ts
-│
-├── playwright.config.ts
-└── README.md
+└── support/
+```
 
-⭐ Destaques da Arquitetura de Testes
-🧪 Tests (E2E)
+---
 
-Testes organizados por domínio da API
+## ⭐ Destaques da Arquitetura de Testes
 
-Validação de fluxos completos
+- **E2E**: testes por domínio e fluxo completo  
+- **Factories**: geração de dados reutilizáveis  
+- **Fixtures**: setup e teardown centralizados  
+- **Services**: encapsulamento das chamadas HTTP  
+- **Database**: limpeza e isolamento de dados  
 
-Cobertura de cenários positivos e negativos
+---
 
-🏭 Factories
+## 🧪 Exemplo de Teste
 
-Geração centralizada de dados de teste
-
-Massa de dados previsível e reutilizável
-
-Redução de duplicação nos testes
-
-🧩 Fixtures
-
-Setup e teardown centralizados
-
-Gerenciamento de autenticação e contexto
-
-Testes mais limpos e consistentes
-
-🔌 Services
-
-Camada responsável por chamadas HTTP
-
-Encapsula regras de comunicação com a API
-
-Evita lógica repetida nos testes
-
-🗄 Database
-
-Limpeza e preparação de dados de teste
-
-Execução segura antes dos testes
-
-Maior confiabilidade e isolamento
-
-🧪 Exemplo de Teste Automatizado
-import { test, expect } from '@playwright/test';
-import { createUser } from '../factories/user.factory';
-
-test('should create a user successfully', async ({ request }) => {
-  const user = createUser();
-
-  const response = await request.post('/auth/register', {
-    data: user,
-  });
-
+```js
+test('should create a user successfully', async ({ authorization }) => {
+  const user = getUserWithLinks();
+  const response = await authorization.createUser(user);
   expect(response.status()).toBe(201);
 });
+```
 
-📐 Diagrama de Arquitetura
+---
+
+## 📐 Diagrama de Arquitetura
+
+```mermaid
 graph TD
-    Tests[Testes Automatizados]
-    Fixtures[Fixtures]
-    Factories[Factories]
-    Services[Services]
-    API[ShortBeyond API]
-    DB[(Database)]
-
     Tests --> Fixtures
     Tests --> Factories
     Tests --> Services
     Services --> API
     API --> DB
+```
 
-🔍 Endpoints Cobertos
-🔐 Autenticação
+---
 
-POST /auth/register
+## 📄 Documentação da API
 
-POST /auth/login
+Arquivo OpenAPI:
 
-🔗 Links
-
-POST /links
-
-GET /links
-
-DELETE /links/{id}
-
-🔁 Redirecionamento
-
-GET /{code}
-
-📄 Documentação da API
+```
 /docs/api.yaml
+```
 
+---
 
-Disponível via Swagger UI.
+## ✂️ Resumo
 
-✂️ Versão Resumida
+Projeto focado em **automação de testes de API profissional**, com arquitetura limpa, reutilizável e escalável.
 
-Automação de testes de API com Playwright
+---
 
-Arquitetura limpa e escalável
-
-Uso de fixtures, factories, services e database
-
-Ambiente controlado via Podman
-
-README pronto para onboarding técnico
-
-🤝 Contribuição
-
-Projeto educacional. Sugestões e melhorias são bem-vindas via pull request.
-
-Feito com ☕ e 💛 para o Projeto TestBeyond
+Feito com ☕ e 💛 para o **Projeto TestBeyond**
