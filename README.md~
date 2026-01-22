@@ -1,1 +1,229 @@
-# pwr-shortbeyond-api
+# ShortBeyond API – Test Automation
+
+Este repositório contém a **estrutura de testes automatizados** da **ShortBeyond API**, uma API RESTful para encurtamento de URLs, desenvolvida em Go e utilizada no Projeto **TestBeyond**.
+
+O foco deste projeto é demonstrar **boas práticas em automação de testes de API**, organização de código, reutilização de dados de teste e facilidade de onboarding.
+
+---
+
+## 📌 Sobre a API
+
+A ShortBeyond API permite:
+
+* Cadastro e autenticação de usuários
+* Criação e gerenciamento de links encurtados
+* Redirecionamento a partir de códigos curtos
+
+> API exclusiva para alunos dos cursos do **Projeto TestBeyond** ☕💛
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Node.js** (ambiente de execução dos testes)
+* **Playwright** (test runner e assertions)
+* **TypeScript** (tipagem e organização)
+* **Bruno** (testes manuais e exploração de API)
+* **Podman** (containerização da API)
+* **Mermaid** (diagrama de arquitetura)
+
+---
+
+## 🚀 Instalação e Configuração
+
+### 1️⃣ Pré-requisitos
+
+* Node.js 18+
+* Podman
+* Bruno CLI
+
+---
+
+### 2️⃣ Clonando o repositório
+
+```bash
+git clone https://github.com/seu-usuario/shortbeyond-api-tests.git
+cd shortbeyond-api-tests
+```
+
+---
+
+### 3️⃣ Instalando dependências
+
+```bash
+npm install
+```
+
+---
+
+### 4️⃣ Subindo a API com Podman
+
+```bash
+podman-compose up -d
+```
+
+A API ficará disponível em:
+
+```
+http://localhost:3333/api
+```
+
+---
+
+### 5️⃣ Executando os testes
+
+```bash
+npx playwright test
+```
+
+Para modo interativo:
+
+```bash
+npx playwright test --ui
+```
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+.
+├── tests/
+│   ├── auth/
+│   │   ├── login.spec.ts
+│   │   └── register.spec.ts
+│   ├── links/
+│   │   ├── create-link.spec.ts
+│   │   ├── list-links.spec.ts
+│   │   └── delete-link.spec.ts
+│   └── redirect/
+│       └── redirect.spec.ts
+│
+├── factories/
+│   ├── user.factory.ts
+│   └── link.factory.ts
+│
+├── fixtures/
+│   └── api.fixture.ts
+│
+├── helpers/
+│   └── auth.helper.ts
+│
+├── playwright.config.ts
+└── README.md
+```
+
+---
+
+## ⭐ Destaques da Arquitetura de Testes
+
+* **Factories**: responsáveis por gerar dados de teste de forma consistente e reutilizável (usuários, links, payloads de API).
+* **Fixtures**: controlam o setup e teardown dos testes, incluindo autenticação, headers comuns e preparação de contexto.
+* **Services**: camada que encapsula chamadas HTTP para a API (ex: AuthService, LinksService), evitando duplicação de lógica nos testes.
+* **Database**: utilitários para manipulação direta da base de dados em cenários de teste (ex: limpeza de dados, preparação de massa).
+* **E2E (End-to-End)**: testes que validam fluxos completos do sistema, cobrindo desde a criação do usuário até o redirecionamento do link encurtado.
+
+### 🧪 Fixtures
+
+* Centralizam setup e teardown
+* Reutilizam autenticação e contexto de API
+* Reduzem duplicação de código
+
+### 🏭 Factories
+
+* Geram dados dinâmicos e válidos
+* Facilitam criação de usuários e links
+* Tornam os testes mais legíveis e previsíveis
+
+---
+
+## 🧪 Exemplo de Teste Automatizado
+
+```ts
+import { test, expect } from '@playwright/test';
+import { createUser } from '../factories/user.factory';
+
+test('deve criar um usuário com sucesso', async ({ request }) => {
+  const user = createUser();
+
+  const response = await request.post('/auth/register', {
+    data: user,
+  });
+
+  expect(response.status()).toBe(201);
+});
+```
+
+**O que este teste demonstra:**
+
+* Uso de factory para dados de entrada
+* Teste independente e legível
+* Validação direta da API
+
+---
+
+## 📐 Diagrama de Arquitetura
+
+```mermaid
+graph TD
+    Tests[Testes Automatizados]
+    Fixtures[Fixtures]
+    Factories[Factories]
+    API[ShortBeyond API]
+    DB[(Database)]
+
+    Tests --> Fixtures
+    Tests --> Factories
+    Fixtures --> API
+    API --> DB
+```
+
+---
+
+## 🔍 Endpoints Cobertos
+
+### Autenticação
+
+* `POST /auth/register`
+* `POST /auth/login`
+
+### Links
+
+* `POST /links`
+* `GET /links`
+* `DELETE /links/{id}`
+
+### Redirecionamento
+
+* `GET /{code}`
+
+---
+
+## 📊 Documentação da API
+
+A documentação OpenAPI está disponível em:
+
+```
+/docs/api.yaml
+```
+
+Pode ser explorada via Swagger UI.
+
+---
+
+## ✂️ Versão Resumida
+
+* Testes de API com Playwright
+* Arquitetura limpa com fixtures e factories
+* Setup rápido com Podman
+* README pronto para onboarding
+
+---
+
+## 🤝 Contribuição
+
+Este projeto é educacional. Sugestões e melhorias são bem-vindas via pull request.
+
+---
+
+Feito com ☕ e 💛 para o Projeto **TestBeyond**
