@@ -1,11 +1,13 @@
 import { Pool } from 'pg';
 
+import 'dotenv/config';
+
 const pool = new Pool({
-  host: 'localhost',
-  port: 5432,
-  user: 'dba',
-  password: 'dba',
-  database: 'ShortDB',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 /**
@@ -41,15 +43,20 @@ export async function cleanupTestData() {
   }
 }
 
-if (process.argv[1].includes('database.js')) {
-  cleanupTestData()
-    .then(() => {
-      console.log('✅ Cleanup executado com sucesso');
-      process.exit(0);
-    })
-    .catch(err => {
-      console.error('❌ Erro ao executar cleanup:', err);
-      process.exit(1);
-    });
-}
+// module.exports = {
+//   cleanupTestData,
+// };
 
+// Permite executar o script diretamente via Node.js  
+
+// if (process.argv[1].includes('database.js')) {
+//   cleanupTestData()
+//     .then(() => {
+//       console.log('✅ Cleanup executado com sucesso');
+//       process.exit(0);
+//     })
+//     .catch(err => {
+//       console.error('❌ Erro ao executar cleanup:', err);
+//       process.exit(1);
+//     });
+// }
