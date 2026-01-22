@@ -1,7 +1,7 @@
 export const linkService = (request) => {
 
     const createLink = async (link, token) => {
-        return await request.post('http://localhost:3333/api/links', {
+        return await request.post('/api/links', {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ export const linkService = (request) => {
     }
 
     const getLinks = async (token) => {
-        return await request.get('http://localhost:3333/api/links', {
+        return await request.get('/api/links', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -35,7 +35,7 @@ export const linkService = (request) => {
     const removeLink = async (linkId, token) => {
         // console.log('Removing link with ID:', linkId);
         console.log('Using token:', token);
-        return await request.delete(`http://localhost:3333/api/links/${linkId}`, {
+        return await request.delete(`/api/links/${linkId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
