@@ -62,4 +62,44 @@ npx playwright test
 
 ---
 
+## 📂 Estrutura do Projeto
+
+```text
+.
+├── tests/
+│   ├── auth/
+│   │   ├── login.spec.ts
+│   │   └── register.spec.ts
+│   ├── links/
+│   │   ├── create-link.spec.ts
+│   │   ├── list-links.spec.ts
+│   │   └── delete-link.spec.ts
+│   └── redirect/
+│       └── redirect.spec.ts
+│
+├── factories/
+│   ├── user.factory.ts
+│   └── link.factory.ts
+│
+├── fixtures/
+│   └── api.fixture.ts
+│
+├── helpers/
+│   └── auth.helper.ts
+│
+├── playwright.config.ts
+└── README.md
+```
+
+---
+
+## ⭐ Destaques da Arquitetura de Testes
+
+- **Factories**: responsáveis por gerar dados de teste de forma consistente e reutilizável (usuários, links, payloads de API).
+- **Fixtures**: controlam o setup e teardown dos testes, incluindo autenticação, headers comuns e preparação de contexto.
+- **Services**: camada que encapsula chamadas HTTP para a API (ex: AuthService, LinksService), evitando duplicação de lógica nos testes.
+- **Database**: utilitários para manipulação direta da base de dados em cenários de teste (ex: limpeza de dados, preparação de massa).
+- **E2E (End-to-End)**: testes que validam fluxos completos do sistema, cobrindo desde a criação do usuário até o redirecionamento do link encurtado.
+---
+
 Feito com ☕ e 💛 para o **Projeto TestBeyond**
